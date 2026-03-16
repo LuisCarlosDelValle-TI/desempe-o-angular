@@ -1,0 +1,116 @@
+<div class="container py-4">
+  <h2 class="mb-4">Gestión de Salas y Reservas</h2>
+
+  <div *ngIf="mensajeExito" class="alert alert-success">{{ mensajeExito }}</div>
+  <div *ngIf="mensajeError" class="alert alert-danger">{{ mensajeError }}</div>
+
+  <div class="row g-4">
+    <div class="col-md-5">
+      <div class="card shadow-sm">
+        <div class="card-header">Nueva Sala</div>
+        <div class="card-body">
+          <div class="mb-3">
+            <label class="form-label">Nombre</label>
+            <input class="form-control" [(ngModel)]="formSala.nombreSala" name="nombreSala" />
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Capacidad</label>
+            <input type="number" class="form-control" [(ngModel)]="formSala.capacidad" name="capacidad" />
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Ubicación</label>
+            <input class="form-control" [(ngModel)]="formSala.ubicacion" name="ubicacion" />
+          </div>
+          <button class="btn btn-primary w-100" (click)="crearSala()">Crear Sala</button>
+        </div>
+      </div>
+
+      <div class="card shadow-sm mt-4">
+        <div class="card-header">Salas Registradas</div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item" *ngFor="let sala of salas">
+            <div class="d-flex justify-content-between align-items-start">
+              <div>
+                <strong>{{ sala.nombreSala }}</strong><br />
+                Capacidad: {{ sala.capacidad }} | {{ sala.ubicacion }}<br />
+                Estado:
+                <span class="badge" [ngClass]="sala.disponible ? 'bg-success' : 'bg-secondary'">
+                  {{ sala.disponible ? 'Disponible' : 'No disponible' }}
+                </span>
+              </div>
+              <div class="btn-group btn-group-sm">
+                <button class="btn btn-outline-warning" (click)="toggleMantenimiento(sala, true)">
+                  Mantenimiento
+                </button>
+                <button class="btn btn-outline-success" (click)="toggleMantenimiento(sala, false)">
+                  Habilitar
+                </button>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="col-md-7">
+      <div class="card shadow-sm">
+        <div class="card-header">Nueva Reserva</div>
+        <div class="card-body">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Usuario</label>
+              <input class="form-control" [(ngModel)]="formReserva.nombreUsuario" name="nombreUsuario" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Sala</label>
+              <select class="form-select" [(ngModel)]="formReserva.idSala" name="idSala">
+                <option *ngFor="let sala of salas" [ngValue]="sala.idSala">
+                  {{ sala.nombreSala }} - {{ sala.disponible ? 'Disponible' : 'No disponible' }}
+                </option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Fecha</label>
+              <input type="date" class="form-control" [(ngModel)]="formReserva.fecha" name="fecha" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Inicio</label>
+              <input type="time" class="form-control" [(ngModel)]="formReserva.horaInicio" name="horaInicio" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Fin</label>
+              <input type="time" class="form-control" [(ngModel)]="formReserva.horaFin" name="horaFin" />
+            </div>
+          </div>
+          <button class="btn btn-success mt-3 w-100" (click)="crearReserva()">Registrar Reserva</button>
+        </div>
+      </div>
+
+      <div class="card shadow-sm mt-4">
+        <div class="card-header">Reservas</div>
+        <div class="table-responsive">
+          <table class="table table-striped mb-0">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Usuario</th>
+                <th>Sala</th>
+                <th>Fecha</th>
+                <th>Horario</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let r of reservas">
+                <td>{{ r.idReserva }}</td>
+                <td>{{ r.nombreUsuario }}</td>
+                <td>{{ r.sala.nombreSala }}</td>
+                <td>{{ r.fecha }}</td>
+                <td>{{ r.horaInicio }} - {{ r.horaFin }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
